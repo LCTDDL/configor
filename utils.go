@@ -47,6 +47,7 @@ func (c *Configor) getConfigurationFileWithENVPrefix(file, env string) (string, 
 	}
 	var (
 		envFile string
+
 		extname = path.Ext(file)
 	)
 
