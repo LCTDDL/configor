@@ -414,3 +414,7 @@ func (configor *Configor) load(config interface{}, watchMode bool, files ...stri
 func MarshalYaml(config interface{}) (out []byte, err error) {
 	return yaml.Marshal(config)
 }
+
+func MarshalToml(config interface{}) (out []byte, err error) {
+	return toml.Marshal(config)
+}
