@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BurntSushi/toml"
-	"gopkg.in/yaml.v2"
+	"github.com/pelletier/go-toml"
+	"gopkg.in/yaml.v3"
 )
 
 // UnmatchedTomlKeysError errors are returned by the Load function when
@@ -22,7 +22,7 @@ import (
 // toml config file. The string returned by Error() contains the names of the
 // missing keys.
 type UnmatchedTomlKeysError struct {
-	Keys []toml.Key
+	err error
 }
 
 func (e *UnmatchedTomlKeysError) Error() string {
@@ -127,7 +127,7 @@ func (c *Configor) processFile(config interface{}, file string, errorOnUnmatched
 	switch {
 	case strings.HasSuffix(file, ".yaml") || strings.HasSuffix(file, ".yml"):
 		if errorOnUnmatchedKeys {
-			return yaml.UnmarshalStrict(data, config)
+			return yaml.Unmarshal(data, config)
 		}
 		return yaml.Unmarshal(data, config)
 	case strings.HasSuffix(file, ".toml"):
@@ -148,11 +148,8 @@ func (c *Configor) processFile(config interface{}, file string, errorOnUnmatched
 		}
 
 		var yamlError error
-		if errorOnUnmatchedKeys {
-			yamlError = yaml.UnmarshalStrict(data, config)
-		} else {
-			yamlError = yaml.Unmarshal(data, config)
-		}
+
+		yamlError = yaml.Unmarshal(data, config)
 
 		if yamlError == nil {
 			return nil
@@ -165,21 +162,23 @@ func (c *Configor) processFile(config interface{}, file string, errorOnUnmatched
 }
 
 // GetStringTomlKeys returns a string array of the names of the keys that are passed in as args
-func GetStringTomlKeys(list []toml.Key) []string {
-	arr := make([]string, len(list))
-
-	for index, key := range list {
-		arr[index] = key.String()
-	}
-	return arr
-}
+//func GetStringTomlKeys(list []toml.Key) []string {
+//	arr := make([]string, len(list))
+//
+//	for index, key := range list {
+//		arr[index] = key.String()
+//	}
+//	return arr
+//}
 
 func unmarshalToml(data []byte, config interface{}, errorOnUnmatchedKeys bool) error {
-	metadata, err := toml.Decode(string(data), config)
-	if err == nil && len(metadata.Undecoded()) > 0 && errorOnUnmatchedKeys {
-		return &UnmatchedTomlKeysError{Keys: metadata.Undecoded()}
+
+	err := toml.Unmarshal(data, config)
+
+	if err != nil {
+		return &UnmatchedTomlKeysError{err: err}
 	}
-	return err
+	return nil
 }
 
 // unmarshalJSON unmarshals the given data into the config interface.

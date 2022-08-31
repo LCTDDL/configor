@@ -2,7 +2,7 @@
 
 Golang Configuration tool that support YAML, JSON, TOML, Shell Environment (Supports Go 1.10+)
 
-[![test status](https://github.com/jinzhu/configor/workflows/tests/badge.svg?branch=master "test status")](https://github.com/jinzhu/configor/actions)
+[![test status](https://github.com/LCTDDL/configor/workflows/tests/badge.svg?branch=master "test status")](https://github.com/jinzhu/configor/actions)
 
 ## Usage
 
@@ -11,7 +11,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/jinzhu/configor"
+	"github.com/LCTDDL/configor"
 )
 
 var Config = struct {

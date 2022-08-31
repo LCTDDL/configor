@@ -1,8 +1,8 @@
-module github.com/jinzhu/configor
+module github.com/LCTDDL/configor
 
 go 1.16
 
 require (
-	github.com/BurntSushi/toml v0.3.1
-	gopkg.in/yaml.v2 v2.2.2
+	github.com/pelletier/go-toml v1.9.5
+	gopkg.in/yaml.v3 v3.0.1
 )
