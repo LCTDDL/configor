@@ -411,8 +411,6 @@ func (configor *Configor) load(config interface{}, watchMode bool, files ...stri
 	return err, true
 }
 
-func  MarshalYaml(config interface{}) (out []byte,err error) {
+func MarshalYaml(config interface{}) (out []byte, err error) {
 	return yaml.Marshal(config)
 }
-
-
