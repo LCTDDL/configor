@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
@@ -26,7 +25,7 @@ type UnmatchedTomlKeysError struct {
 }
 
 func (e *UnmatchedTomlKeysError) Error() string {
-	return fmt.Sprintf("There are keys in the config file that do not match any field in the given struct: %v", e.Keys)
+	return fmt.Sprintf("There are keys in the config file that do not match any field in the given struct: %v", e.err)
 }
 
 func (configor *Configor) getENVPrefix(config interface{}) string {
@@ -113,7 +112,7 @@ func (configor *Configor) getConfigurationFiles(config *Config, watchMode bool, 
 }
 
 func (c *Configor) processFile(config interface{}, file string, errorOnUnmatchedKeys bool) error {
-	readFile := ioutil.ReadFile
+	readFile := os.ReadFile
 	if c.FS != nil {
 		readFile = func(filename string) ([]byte, error) {
 			return fs.ReadFile(c.FS, filename)
@@ -411,3 +410,9 @@ func (configor *Configor) load(config interface{}, watchMode bool, files ...stri
 
 	return err, true
 }
+
+func  MarshalYaml(config interface{}) (out []byte,err error) {
+	return yaml.Marshal(config)
+}
+
+
